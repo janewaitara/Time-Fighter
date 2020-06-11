@@ -4,9 +4,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+
 /**
  * Whenever an orientation is changed in android, the current activity is destroyed and a new one is create
  * Thats why oncreate is called when the orientation changes(which results to configuration change - results in an activity flow being inactive)
@@ -50,6 +54,9 @@ class MainActivity : AppCompatActivity() {
         timeLeftText = findViewById(R.id.timeLeftText)
 
         tapMeButton.setOnClickListener { view->
+            val bounceAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce)
+            view.startAnimation(bounceAnimation)
+
             incrementScore()
         }
 
@@ -81,6 +88,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
     private fun incrementScore() {
         if (!hasGameStarted){
 
@@ -89,6 +97,9 @@ class MainActivity : AppCompatActivity() {
         score += 1
         val newScore = getString(R.string.your_score, score)
         gameScoreText.text = newScore
+
+        val blinkAnimation = AnimationUtils.loadAnimation(this,R.anim.blink)
+        gameScoreText.startAnimation(blinkAnimation)
 
     }
 
