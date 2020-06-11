@@ -53,7 +53,13 @@ class MainActivity : AppCompatActivity() {
             incrementScore()
         }
 
-        resetGame()
+        if (savedInstanceState != null){ //checks if there are saved instances
+            score = savedInstanceState.getInt(SCORE_KEY)
+            timeLeftOnTimer = savedInstanceState.getLong(TIME_LEFT_KEY)
+            restoreGame()
+        }else {
+            resetGame()
+        }
 
     }
 
@@ -99,16 +105,36 @@ class MainActivity : AppCompatActivity() {
 
                 endGame()
             }
-
             override fun onTick(millisUntilFinished: Long) {
                 timeLeftOnTimer = millisUntilFinished
                val timeLeft = millisUntilFinished/ 1000
                 timeLeftText.text = getString(R.string.time_left, timeLeft)
             }
-
         }
-
         hasGameStarted = false
+    }
+
+    private fun restoreGame() {
+
+        gameScoreText.text = getString(R.string.your_score, score)
+
+        val restoredTime = timeLeftOnTimer / 1000
+        timeLeftText.text = getString(R.string.time_left, restoredTime)
+
+        countDownTimer = object : CountDownTimer(timeLeftOnTimer,countDownInterval){
+            override fun onFinish() {
+                endGame()
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                timeLeftOnTimer = millisUntilFinished
+                val timeLeft = millisUntilFinished/ 1000
+                timeLeftText.text = getString(R.string.time_left, timeLeft)
+
+            }
+        }
+        startGame()
+
     }
 
     private fun startGame(){
