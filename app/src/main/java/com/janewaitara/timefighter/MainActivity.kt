@@ -1,9 +1,13 @@
 package com.janewaitara.timefighter
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
@@ -81,12 +85,38 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG,"onSaveInstanceState: Saving score: $score and Time Left: $timeLeftOnTimer")
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.menu,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+       super.onOptionsItemSelected(item)
+        if (item.itemId == R.id.actionAbout){
+            showInfo()
+        }
+
+        return true
+    }
+
     override fun onDestroy() {
         super.onDestroy()
 
         Log.d(TAG,"onDestroy is called")
     }
 
+
+    @SuppressLint("StringFormatInvalid")
+    private fun showInfo(){
+        val dialogTitle = getString(R.string.aboutTitle, BuildConfig.VERSION_NAME) //corporates the app version
+        val dialogMessage = getString(R.string.aboutMessage)
+        val builder = AlertDialog.Builder(this) //the dialog knows where to appear
+        builder.setTitle(dialogTitle)
+        builder.setMessage(dialogMessage)
+        builder.create().show()
+
+    }
 
 
     private fun incrementScore() {
